@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - CherryDine{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Личные данные</h3>
+                        <p><strong>Логин:</strong> {{ user.get_full_name|default:user.username }}</p>
+                        <p><strong>Имя:</strong> {{ user.first_name|default:"Не указан" }}</p>
+                        <p><strong>Фамилия:</strong> {{ user.last_name|default:"Не указан" }}</p>
+                        <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+                        <p><strong>Телефон:</strong> {{ user.phone_number|default:"Не указан" }}</p>
+                        <p><strong>Адрес:</strong> {{ user.address|default:"Не указан" }}</p>
+                        <a href="{% url 'profile_edit' %}" class="btn btn-primary">
+                            Редактировать профиль
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <h2>История заказов</h2>
+                {% for order in orders %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Заказ #{{ order.id }}</h5>
+                            <p><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+                            <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+                            <p><strong>Сумма:</strong> {{ order.total_amount }} ₽</p>
+                            <a href="{% url 'order_detail' order.pk %}"
+                               class="btn btn-outline-primary">
+                                Подробнее
+                            </a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>У вас пока нет заказов</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

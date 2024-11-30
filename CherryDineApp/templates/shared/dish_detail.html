@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ dish.name }} - CherryDine{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <!-- Информация о блюде -->
+            <div class="col-md-6">
+                {% if dish.image %}
+                    <img src="{{ dish.image.url }}" class="img-fluid rounded" alt="{{ dish.name }}">
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h1>{{ dish.name }}</h1>
+                <p class="lead">{{ dish.description }}</p>
+                <p class="h3 mb-4">{{ dish.price }} ₽</p>
+                <p><strong>Категория:</strong> {{ dish.get_category_display }}</p>
+
+                {% if user.role == 'admin' %}
+                    <!-- Элементы управления для администратора -->
+                    <div class="btn-group">
+                        <a href="{% url 'edit_menu_item' dish.pk %}?next=detail"
+                           class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Изменить
+                        </a>
+                        <button type="button" class="btn btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
+                    </div>
+                {% else %}
+                    <!-- Кнопка добавления в корзину для гостя -->
+                    <button class="btn btn-lg btn-success add-to-cart"
+                            data-dish-id="{{ dish.pk }}">
+                        <i class="fas fa-shopping-cart"></i> Добавить в корзину
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Отзывы -->
+        <div class="row mt-5">
+            <div class="col">
+                <h2>Отзывы о блюде</h2>
+
+                {% for review in dish.reviews.all %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title mb-0">{{ review.user.get_full_name|default:review.user.username }}</h5>
+                                    <small class="text-muted">
+                                        Заказ #{{ review.order.id }} от {{ review.created_at|date:"d.m.Y" }}
+                                    </small>
+                                </div>
+                                <div class="text-warning">
+                                    {% for i in ""|ljust:review.rating %}★{% endfor %}
+                                    {% for i in ""|ljust:5|slice:review.rating %}☆{% endfor %}
+                                </div>
+                            </div>
+                            <p class="card-text mt-2">{{ review.comment }}</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-info">
+                        Пока нет отзывов об этом блюде
+                    </div>
+                {% endfor %}
+
+                {% if user.is_authenticated and user.role == 'guest' %}
+                    <div class="alert alert-secondary">
+                        <i class="fas fa-info-circle"></i>
+                        Вы сможете оставить отзыв после получения заказа с этим блюдом
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if user.role == 'admin' %}
+        <!-- Модальное окно подтверждения удаления -->
+        <div class="modal fade" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Подтверждение удаления</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Вы уверены, что хотите удалить блюдо "{{ dish.name }}"?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <form action="{% url 'delete_menu_item' dish.pk %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

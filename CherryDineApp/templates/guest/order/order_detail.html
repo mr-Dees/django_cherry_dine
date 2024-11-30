@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Детали заказа{% endblock %}
+
+{% block content %}
+    <h1>Детали заказа #{{ order.id }}</h1>
+    <p>Статус: {{ order.status }}</p>
+    <p>Дата: {{ order.created_at }}</p>
+    <ul>
+        {% for item in order.items.all %}
+            <li>{{ item.name }} - {{ item.price }} руб.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'menu' %}" class="btn btn-secondary">Вернуться в меню</a>
+    <a href="{% url 'cart' %}" class="btn btn-secondary">Корзина</a>
+{% endblock %}

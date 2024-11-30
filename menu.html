@@ -1,0 +1,21 @@
+{% extends "email/../email/../base.html" %}
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+<h2>Меню</h2>
+
+<div class="row">
+    {% for item in menu_items %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text"><strong>{{ item.price }} ₽</strong></p>
+                    <a href="{% url 'add_to_cart' item.id %}" class="btn btn-success">Добавить в корзину</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

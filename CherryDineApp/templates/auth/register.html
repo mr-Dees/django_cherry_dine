@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация - CherryDine{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Регистрация</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

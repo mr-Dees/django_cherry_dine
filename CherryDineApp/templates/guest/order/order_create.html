@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Создать заказ{% endblock %}
+
+{% block content %}
+    <h1>Создать заказ</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for item in menu_items %}
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="{{ item.id }}">
+                    {{ item.name }} - {{ item.price }} руб.
+                </label>
+            </div>
+        {% endfor %}
+        <button type="submit">Оформить заказ</button>
+        <a href="{% url 'cart' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Меню - CherryDine{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Меню</h1>
+            {% if user.role == 'admin' %}
+                <a href="{% url 'add_menu_item' %}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Добавить блюдо
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Фильтр по категориям -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="btn-group">
+                    <a href="{% url 'menu' %}"
+                       class="btn btn-outline-primary {% if not request.GET.category %}active{% endif %}">
+                        Все
+                    </a>
+                    {% for category in categories %}
+                        <a href="{% url 'menu' %}?category={{ category.slug }}"
+                           class="btn btn-outline-primary {% if request.GET.category == category.slug %}active{% endif %}">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Список блюд -->
+        <div class="row">
+            {% for dish in dishes %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if dish.image %}
+                            <img src="{{ dish.image.url }}" class="card-img-top" alt="{{ dish.name }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ dish.name }}</h5>
+                            <p class="card-text">{{ dish.description|truncatewords:20 }}</p>
+                            <p class="card-text"><strong>{{ dish.price }} ₽</strong></p>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% if user.role == 'admin' %}
+                                    <!-- Элементы управления для администратора -->
+                                    <div class="btn-group">
+                                        <a href="{% url 'edit_menu_item' dish.pk %}?next=menu"
+                                           class="btn btn-warning">
+                                            <i class="fas fa-edit"></i> Изменить
+                                        </a>
+                                        <button type="button"
+                                                class="btn btn-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal{{ dish.pk }}">
+                                            <i class="fas fa-trash"></i> Удалить
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <!-- Элементы управления для гостя -->
+                                    <div class="btn-group">
+                                        <a href="{% url 'dish_detail' dish.pk %}"
+                                           class="btn btn-primary">Подробнее</a>
+                                        <button class="btn btn-success add-to-cart"
+                                                data-dish-id="{{ dish.pk }}">
+                                            В корзину
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {% if user.role == 'guest' %}
+                                <!-- Отзывы видны только гостям -->
+                                <div class="mt-3">
+                                    <small class="text-muted">
+                                        Рейтинг: {{ dish.average_rating|default:"Нет отзывов" }}
+                                        {% if dish.reviews.count > 0 %}
+                                            ({{ dish.reviews.count }} отзыв{{ dish.reviews.count|pluralize:"ов" }})
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if user.role == 'admin' %}
+                    <!-- Модальное окно подтверждения удаления -->
+                    <div class="modal fade" id="deleteModal{{ dish.pk }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Подтверждение удаления</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Вы уверены, что хотите удалить блюдо "{{ dish.name }}"?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена
+                                    </button>
+                                    <form action="{% url 'delete_menu_item' dish.pk %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div class="col">
+                    <p class="text-center">Блюда не найдены</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

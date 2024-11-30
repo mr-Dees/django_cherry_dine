@@ -1,0 +1,56 @@
+<!-- templates/admin/add_menu_item.html -->
+{% extends "base.html" %}
+
+{% block title %}Добавление блюда{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center mb-0">Добавление нового блюда</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}{% if field.field.required %}
+                                            <span class="text-danger">*</span>{% endif %}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger">
+                                            {% for error in field.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Добавить блюдо</button>
+                                <a href="{% url 'menu' %}" class="btn btn-secondary">Отмена</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

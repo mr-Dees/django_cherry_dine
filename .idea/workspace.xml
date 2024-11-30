@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/django_cherry_dine.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/static/css/base.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/admin/add_menu_item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/admin/edit_menu_item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/auth/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/auth/register.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/add_review.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/cart.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_create.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/profile_edit.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/dish_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/menu.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CherryDineApp/urls.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2pF8x9GtP2wUVjmm8HUqR4bQCaV" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.django_cherry_dine.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.127.0.0.1:8000.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\shared" />
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\guest" />
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\guest\order" />
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates" />
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\email" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.127.0.0.1:8000">
+    <configuration name="127.0.0.1:8000" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://127.0.0.1:8000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="django_cherry_dine" type="Python.DjangoServer" factoryName="Django server">
+      <module name="django_cherry_dine" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="CherryDineProject.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="localhost" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.127.0.0.1:8000" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-PY-243.21565.199" />
+        <option value="bundled-python-sdk-cab1f2013843-4ae2d6a61b08-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.21565.199" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="" />
+      <created>1732350707391</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732350707391</updated>
+      <workItem from="1732350708303" duration="478000" />
+      <workItem from="1732351200315" duration="542000" />
+      <workItem from="1732351755010" duration="4816000" />
+      <workItem from="1732359782021" duration="5833000" />
+      <workItem from="1732369656970" duration="571000" />
+      <workItem from="1732370259931" duration="61000" />
+      <workItem from="1732370330270" duration="9172000" />
+      <workItem from="1732717295352" duration="23263000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

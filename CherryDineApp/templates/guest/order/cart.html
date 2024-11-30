@@ -1,0 +1,37 @@
+{% extends "email/../email/../base.html" %}
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+    <h2>Корзина</h2>
+
+    {% if items_with_details %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Блюдо</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Итого</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for detail in items_with_details %}
+                <tr>
+                    <td>{{ detail.item.name }}</td>
+                    <td>{{ detail.item.price }} ₽</td>
+                    <td>{{ detail.quantity }}</td>
+                    <td>{{ detail.subtotal }} ₽</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' detail.item.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p><strong>Общая стоимость: {{ total_price }} ₽</strong></p>
+        <a href="{% url 'order_list' %}" class="btn btn-primary">Оформить заказ</a>
+    {% else %}
+        <p>Корзина пуста. <a href="{% url 'menu' %}">Перейти в меню</a>.</p>
+    {% endif %}
+{% endblock %}

@@ -20,6 +20,7 @@ urlpatterns = [
     # Корзина
     path('cart/', views.cart, name='cart'),
     path('cart/add/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/update/<int:item_id>/', views.update_cart_quantity, name='update_cart_quantity'),
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
 
     # Заказы

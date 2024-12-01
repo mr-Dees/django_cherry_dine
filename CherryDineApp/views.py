@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
+import json
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
@@ -222,11 +223,59 @@ def add_to_cart(request, item_id):
 
 @login_required
 def remove_from_cart(request, item_id):
-    cart = request.session.get('cart', {})
-    if item_id in cart:
-        del cart[item_id]
-    request.session['cart'] = cart
-    return redirect('cart')
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+        item_id = str(item_id)
+
+        try:
+            menu_item = MenuItem.objects.get(id=item_id)
+            if item_id in cart:
+                del cart[item_id]
+                request.session['cart'] = cart
+                return JsonResponse({
+                    'success': True,
+                    'message': f'{menu_item.name} удален из корзины',
+                    'cart_total': sum(cart.values())
+                })
+        except MenuItem.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Товар не найден'
+            })
+
+    return JsonResponse({'success': False, 'message': 'Неверный метод запроса'})
+
+
+@login_required
+def update_cart_quantity(request, item_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            quantity = int(data.get('quantity', 1))
+            cart = request.session.get('cart', {})
+            item_id = str(item_id)
+
+            menu_item = MenuItem.objects.get(id=item_id)
+            cart[item_id] = quantity
+            request.session['cart'] = cart
+            subtotal = menu_item.price * quantity
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Количество обновлено',
+                'subtotal': float(subtotal),
+                'cart_total': sum(cart.values())
+            })
+        except (json.JSONDecodeError, ValueError, MenuItem.DoesNotExist) as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=400)
+
+    return JsonResponse({
+        'success': False,
+        'message': 'Метод не поддерживается'
+    }, status=405)
 
 
 # Список заказов

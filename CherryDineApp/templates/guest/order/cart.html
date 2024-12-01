@@ -20,16 +20,32 @@
                 <tr>
                     <td>{{ detail.item.name }}</td>
                     <td>{{ detail.item.price }} ₽</td>
-                    <td>{{ detail.quantity }}</td>
+                    <td>
+                        <div class="input-group" style="max-width: 150px;">
+                            <button class="btn btn-outline-secondary decrease-quantity"
+                                    data-item-id="{{ detail.item.id }}"
+                                    type="button">-
+                            </button>
+                            <input type="number" class="form-control text-center item-quantity"
+                                   value="{{ detail.quantity }}" min="1" readonly>
+                            <button class="btn btn-outline-secondary increase-quantity"
+                                    data-item-id="{{ detail.item.id }}"
+                                    type="button">+
+                            </button>
+                        </div>
+                    </td>
                     <td>{{ detail.subtotal }} ₽</td>
                     <td>
-                        <a href="{% url 'remove_from_cart' detail.item.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                        <button class="btn btn-danger btn-sm remove-from-cart"
+                                data-item-id="{{ detail.item.id }}">
+                            Удалить
+                        </button>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <p><strong>Общая стоимость: {{ total_price }} ₽</strong></p>
+        <p><strong>Общая стоимость: <span id="cart-total">{{ total_price }}</span> ₽</strong></p>
         <a href="{% url 'order_list' %}" class="btn btn-primary">Оформить заказ</a>
     {% else %}
         <p>Корзина пуста. <a href="{% url 'menu' %}">Перейти в меню</a>.</p>

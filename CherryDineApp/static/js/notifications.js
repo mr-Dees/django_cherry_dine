@@ -1,5 +1,9 @@
-// Глобальная переменная для состояния звука
+// Глобальные переменные
 let isSoundEnabled = localStorage.getItem('soundEnabled') !== 'false';
+const notificationQueue = [];
+const MAX_NOTIFICATIONS = 3;
+let activeNotifications = 0;
+const NOTIFICATION_DURATION = 3000;
 
 // Функция для получения CSRF токена
 function getCookie(name) {
@@ -30,26 +34,50 @@ function playNotificationSound() {
 }
 
 // Функция показа уведомлений
-function showNotification(message, type = 'success') {
+function showNotification(message, type = 'success', playSound = true) {
+    const notificationData = {message, type};
+    notificationQueue.push(notificationData);
+    if (playSound) {
+        playNotificationSound();
+    }
+    processNotificationQueue();
+}
+
+// Функция обработки очереди уведомлений
+function processNotificationQueue() {
+    if (notificationQueue.length === 0 || activeNotifications >= MAX_NOTIFICATIONS) {
+        return;
+    }
+
     const container = document.getElementById('notification-container');
+    const notificationData = notificationQueue.shift();
+    activeNotifications++;
 
     const notification = document.createElement('div');
-    notification.className = `alert alert-${type} alert-dismissible fade show`;
+    notification.className = `alert alert-${notificationData.type} alert-dismissible fade show`;
     notification.role = 'alert';
     notification.innerHTML = `
-        ${message}
+        ${notificationData.message}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
 
     container.appendChild(notification);
-    playNotificationSound();
 
+    // Обработчик для кнопки закрытия
+    notification.querySelector('.btn-close').addEventListener('click', () => {
+        activeNotifications--;
+        setTimeout(processNotificationQueue, 150);
+    });
+
+    // Автоматическое удаление уведомления
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => {
             notification.remove();
+            activeNotifications--;
+            processNotificationQueue();
         }, 150);
-    }, 5000);
+    }, NOTIFICATION_DURATION);
 }
 
 // Основной код при загрузке страницы
@@ -58,20 +86,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const soundToggle = document.getElementById('sound-toggle');
     const soundIcon = soundToggle.querySelector('i');
 
-// Инициализация тултипов Bootstrap с автоматическим скрытием
+    // Инициализация тултипов Bootstrap
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl, {
-            trigger: 'hover',    // Показывать только при наведении
-            html: true,          // Разрешаем HTML в подсказке
-            delay: {             // Задержки появления/исчезновения
-                show: 0,         // Показывать сразу
-                hide: 0          // Скрывать сразу
-            }
+            trigger: 'hover',
+            html: true,
+            delay: {show: 0, hide: 0}
         });
     });
 
-    // Установка начального состояния звука
+    // Функция обновления состояния звука
     function updateSoundToggleState() {
         if (isSoundEnabled) {
             soundIcon.className = 'fas fa-volume-up';
@@ -98,13 +123,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Обработка существующих уведомлений Django messages
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(alert => {
-        playNotificationSound();
-        setTimeout(() => {
-            alert.classList.remove('show');
-            setTimeout(() => {
-                alert.remove();
-            }, 150);
-        }, 5000);
+        showNotification(
+            alert.textContent.trim(),
+            alert.classList.contains('alert-danger') ? 'danger' : 'success',
+            false // Не воспроизводить звук для начальных уведомлений
+        );
+        alert.remove();
     });
 
     // Обработка кнопок добавления в корзину
@@ -125,19 +149,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        showNotification(data.message, 'success');
-
+                        showNotification(data.message, 'success', true);
                         const cartCounter = document.querySelector('.cart-counter');
                         if (cartCounter) {
                             cartCounter.textContent = data.cart_total;
                         }
                     } else {
-                        showNotification(data.message, 'danger');
+                        showNotification(data.message, 'danger', true);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showNotification('Произошла ошибка при добавлении в корзину', 'danger');
+                    showNotification('Произошла ошибка при добавлении в корзину', 'danger', true);
                 })
                 .finally(() => {
                     this.classList.remove('disabled');

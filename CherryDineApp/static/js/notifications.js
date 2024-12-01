@@ -35,6 +35,9 @@ function playNotificationSound() {
 
 // Функция показа уведомлений
 function showNotification(message, type = 'success', playSound = true) {
+    // Если сообщение пустое, не показываем уведомление
+    if (!message) return;
+
     const notificationData = {message, type};
     notificationQueue.push(notificationData);
     if (playSound) {

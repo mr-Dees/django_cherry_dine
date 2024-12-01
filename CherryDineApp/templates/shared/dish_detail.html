@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block extra_scripts %}
+    <script src="{% static 'js/adding_dish.js' %}"></script>
+{% endblock %}
+
 {% block title %}{{ dish.name }} - CherryDine{% endblock %}
 
 {% block content %}
@@ -31,10 +37,24 @@
                     </div>
                 {% else %}
                     <!-- Кнопка добавления в корзину для гостя -->
-                    <button class="btn btn-lg btn-success add-to-cart"
-                            data-dish-id="{{ dish.pk }}">
-                        <i class="fas fa-shopping-cart"></i> Добавить в корзину
-                    </button>
+                    <div class="d-flex align-items-center">
+                        {% if not dish.in_cart %}
+                            <div class="input-group me-2" style="width: 120px;">
+                                <button class="btn btn-outline-secondary decrease-quantity" type="button">-</button>
+                                <input type="number" class="form-control text-center item-quantity"
+                                       value="1" min="1" max="99" readonly>
+                                <button class="btn btn-outline-secondary increase-quantity" type="button">+</button>
+                            </div>
+                            <button class="btn btn-success add-to-cart"
+                                    data-dish-id="{{ dish.id }}">
+                                В корзину
+                            </button>
+                        {% else %}
+                            <a href="{% url 'cart' %}" class="btn btn-primary">
+                                Перейти в корзину
+                            </a>
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
         </div>

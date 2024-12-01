@@ -63,10 +63,18 @@ def logout_view(request):
     return redirect('index')
 
 
-@login_required
 def menu(request):
-    items = MenuItem.objects.all()
-    return render(request, 'shared/menu.html', {'dishes': items})
+    dishes = MenuItem.objects.all()
+    cart = request.session.get('cart', {})
+
+    # Добавляем информацию о наличии в корзине для каждого блюда
+    for dish in dishes:
+        dish.in_cart = str(dish.id) in cart
+
+    context = {
+        'dishes': dishes,
+    }
+    return render(request, 'shared/menu.html', context)
 
 
 @login_required
@@ -136,7 +144,13 @@ def delete_menu_item(request, pk):
 
 def dish_detail(request, pk):
     dish = get_object_or_404(MenuItem, pk=pk)
-    return render(request, 'shared/dish_detail.html', {'dish': dish})
+    cart = request.session.get('cart', {})
+    dish.in_cart = str(pk) in cart
+
+    context = {
+        'dish': dish,
+    }
+    return render(request, 'shared/dish_detail.html', context)
 
 
 @login_required
@@ -195,18 +209,34 @@ def cart(request):
 @login_required
 def add_to_cart(request, item_id):
     if request.method == 'POST':
-        cart = request.session.get('cart', {})
-        item_id = str(item_id)
+        # Проверяем, есть ли JSON данные в запросе
+        if not request.body or not request.headers.get('Content-Type') == 'application/json':
+            return JsonResponse({'success': True}, status=200)  # Возвращаем без сообщения
 
         try:
+            # Получаем данные из JSON
+            data = json.loads(request.body.decode('utf-8'))
+            quantity = int(data.get('quantity', 1))
+
+            # Получаем товар
             menu_item = MenuItem.objects.get(id=item_id)
-            cart[item_id] = cart.get(item_id, 0) + 1
+
+            # Обновляем корзину
+            cart = request.session.get('cart', {})
+            item_id = str(item_id)
+
+            # Если товар уже есть в корзине, прибавляем количество
+            if item_id in cart:
+                cart[item_id] += quantity
+            else:
+                cart[item_id] = quantity
+
             request.session['cart'] = cart
 
             return JsonResponse({
                 'success': True,
-                'message': f'{menu_item.name} добавлен в корзину',
-                'cart_total': sum(cart.values())  # Общее количество товаров в корзине
+                'message': f'{menu_item.name} добавлен в корзину ({quantity} шт.)',
+                'cart_total': sum(cart.values())
             })
 
         except MenuItem.DoesNotExist:
@@ -218,7 +248,7 @@ def add_to_cart(request, item_id):
     return JsonResponse({
         'success': False,
         'message': 'Неверный метод запроса'
-    }, status=400)
+    }, status=405)
 
 
 @login_required

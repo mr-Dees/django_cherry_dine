@@ -37,7 +37,7 @@ def register(request):
             return redirect('login')
     else:
         form = RegistrationForm()
-    return render(request, 'auth/register.html', {'form': form})
+    return render(request, 'restaurant/auth/register.html', {'form': form})
 
 
 def login_view(request):
@@ -54,7 +54,7 @@ def login_view(request):
                 messages.error(request, 'Неверное имя пользователя или пароль')
     else:
         form = LoginForm()
-    return render(request, 'auth/login.html', {'form': form})
+    return render(request, 'restaurant/auth/login.html', {'form': form})
 
 
 def logout_view(request):
@@ -256,7 +256,7 @@ def add_review(request, order_id):
 @login_required
 def profile(request):
     orders = Order.objects.filter(user=request.user)
-    return render(request, 'guest/profile.html', {'orders': orders})
+    return render(request, 'shared/profile.html', {'orders': orders})
 
 
 @login_required
@@ -269,4 +269,4 @@ def profile_edit(request):
     else:
         form = ProfileEditForm(instance=request.user)  # Загружаем данные текущего пользователя
 
-    return render(request, 'guest/profile_edit.html', {'form': form})
+    return render(request, 'shared/profile_edit.html', {'form': form})

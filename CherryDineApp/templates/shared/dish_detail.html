@@ -63,17 +63,8 @@
                         </div>
                     </div>
                 {% empty %}
-                    <div class="alert alert-info">
-                        Пока нет отзывов об этом блюде
-                    </div>
+                    <p class="text-muted">Пока нет отзывов об этом блюде</p>
                 {% endfor %}
-
-                {% if user.is_authenticated and user.role == 'guest' %}
-                    <div class="alert alert-secondary">
-                        <i class="fas fa-info-circle"></i>
-                        Вы сможете оставить отзыв после получения заказа с этим блюдом
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>

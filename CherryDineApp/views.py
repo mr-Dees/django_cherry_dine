@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from .forms import RegistrationForm, LoginForm, ProfileEditForm, MenuItemForm, OrderForm, ReviewForm
@@ -193,20 +193,31 @@ def cart(request):
 
 @login_required
 def add_to_cart(request, item_id):
-    cart = request.session.get('cart', {})
-    item_id = str(item_id)
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+        item_id = str(item_id)
 
-    # Проверка наличия товара
-    try:
-        menu_item = MenuItem.objects.get(id=item_id)
-    except MenuItem.DoesNotExist:
-        messages.error(request, 'Товар не найден')
-        return redirect('menu')
+        try:
+            menu_item = MenuItem.objects.get(id=item_id)
+            cart[item_id] = cart.get(item_id, 0) + 1
+            request.session['cart'] = cart
 
-    cart[item_id] = cart.get(item_id, 0) + 1
-    request.session['cart'] = cart
-    messages.success(request, f'{menu_item.name} добавлен в корзину')
-    return redirect('menu')
+            return JsonResponse({
+                'success': True,
+                'message': f'{menu_item.name} добавлен в корзину',
+                'cart_total': sum(cart.values())  # Общее количество товаров в корзине
+            })
+
+        except MenuItem.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Товар не найден'
+            }, status=404)
+
+    return JsonResponse({
+        'success': False,
+        'message': 'Неверный метод запроса'
+    }, status=400)
 
 
 @login_required

@@ -49,7 +49,12 @@
             </tbody>
         </table>
         <p><strong>Общая стоимость: <span id="cart-total">{{ total_price }}</span> ₽</strong></p>
-        <a href="{% url 'order_list' %}" class="btn btn-primary">Оформить заказ</a>
+        <form method="POST" action="{% url 'create_order' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">
+                Оформить заказ
+            </button>
+        </form>
     {% else %}
         <p>Корзина пуста. <a href="{% url 'menu' %}">Перейти в меню</a>.</p>
     {% endif %}

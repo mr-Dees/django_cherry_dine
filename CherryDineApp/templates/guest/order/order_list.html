@@ -20,7 +20,7 @@
                     <td>{{ order.id }}</td>
                     <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
                     <td>{{ order.get_status_display }}</td>
-                    <td>{{ order.total_price }} ₽</td>
+                    <td>{{ order.calculate_total }} ₽</td>
                 </tr>
             {% endfor %}
             </tbody>

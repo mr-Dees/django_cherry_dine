@@ -6,7 +6,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from .forms import RegistrationForm, LoginForm, ProfileEditForm, MenuItemForm, OrderForm, ReviewForm
-from .models import User, MenuItem, Order, Review
+from .models import User, MenuItem, Order, Review, OrderItem
 
 
 def is_admin(user):
@@ -156,17 +156,43 @@ def dish_detail(request, pk):
 @login_required
 def create_order(request):
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            order.save()
-            form.save_m2m()
-            send_order_confirmation_email(order)
-            return redirect('order_detail', order_id=order.id)
-    else:
-        form = OrderForm()
-    return render(request, 'guest/order/order_create.html', {'form': form})
+        cart = request.session.get('cart', {})
+
+        if not cart:
+            messages.error(request, 'Корзина пуста')
+            return redirect('cart')
+
+        try:
+            # Создаем заказ
+            order = Order.objects.create(
+                user=request.user,
+                status='processing',
+                total_price=sum(
+                    MenuItem.objects.get(id=item_id).price * quantity
+                    for item_id, quantity in cart.items()
+                )
+            )
+
+            # Добавляем товары в заказ
+            for item_id, quantity in cart.items():
+                menu_item = MenuItem.objects.get(id=item_id)
+                OrderItem.objects.create(
+                    order=order,
+                    menu_item=menu_item,
+                    quantity=quantity
+                )
+
+            # Очищаем корзину
+            request.session['cart'] = {}
+            messages.success(request, 'Заказ успешно создан')
+            return redirect('order_list')
+
+        except Exception as e:
+            print("Error:", str(e))
+            messages.error(request, f'Ошибка при создании заказа: {str(e)}')
+            return redirect('cart')
+
+    return redirect('cart')
 
 
 @login_required

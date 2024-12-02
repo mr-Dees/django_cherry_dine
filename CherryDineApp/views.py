@@ -372,7 +372,14 @@ def order_list(request):
 
 @login_required
 def add_review(request, order_id):
-    order = Order.objects.get(id=order_id, user=request.user)
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    # Проверяем, существует ли уже отзыв для этого заказа
+    existing_review = Review.objects.filter(order=order).first()
+    if existing_review:
+        messages.error(request, 'Вы уже оставили отзыв к этому заказу')
+        return redirect('profile')
+
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -380,16 +387,29 @@ def add_review(request, order_id):
             review.user = request.user
             review.order = order
             review.save()
-            return redirect('order_detail', order_id=order.id)
+            messages.success(request, 'Спасибо за ваш отзыв!')
+            return redirect('profile')
     else:
         form = ReviewForm()
-    return render(request, 'guest/add_review.html', {'form': form, 'order': order})
+
+    return render(request, 'guest/add_review.html', {
+        'form': form,
+        'order': order
+    })
 
 
 @login_required
 def profile(request):
-    orders = Order.objects.filter(user=request.user)
-    return render(request, 'shared/profile.html', {'orders': orders})
+    # Получаем только доставленные заказы
+    delivered_orders = Order.objects.filter(
+        user=request.user,
+        status='delivered'
+    ).order_by('-created_at')
+
+    context = {
+        'orders': delivered_orders,
+    }
+    return render(request, 'shared/profile.html', context)
 
 
 @login_required

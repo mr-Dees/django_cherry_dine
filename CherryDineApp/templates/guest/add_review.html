@@ -3,11 +3,44 @@
 {% block title %}Добавить отзыв{% endblock %}
 
 {% block content %}
-    <h2>Оставить отзыв</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Отправить отзыв</button>
-        <a href="{% url 'menu' %}" class="btn btn-secondary">Вернуться в меню</a>
-    </form>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Оставить отзыв о заказе #{{ order.id }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ form.rating.id_for_label }}"
+                                       class="form-label">{{ form.rating.label }}</label>
+                                {{ form.rating }}
+                                {% if form.rating.errors %}
+                                    <div class="alert alert-danger">
+                                        {{ form.rating.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.comment.id_for_label }}"
+                                       class="form-label">{{ form.comment.label }}</label>
+                                {{ form.comment }}
+                                {% if form.comment.errors %}
+                                    <div class="alert alert-danger">
+                                        {{ form.comment.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                                <button type="button" class="btn btn-secondary" onclick="history.back()">Назад</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -71,7 +71,30 @@ class MenuItemForm(forms.ModelForm):
         }
 
 
+# forms.py
 class ReviewForm(forms.ModelForm):
+    rating = forms.IntegerField(
+        label='Оценка',
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'min': '1',
+                'max': '5',
+                'placeholder': 'Оценка от 1 до 5'
+            }
+        )
+    )
+    comment = forms.CharField(
+        label='Комментарий',
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Напишите ваш отзыв'
+            }
+        )
+    )
+
     class Meta:
         model = Review
         fields = ['rating', 'comment']

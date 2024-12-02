@@ -30,15 +30,13 @@
                             <h5 class="card-title">Заказ #{{ order.id }}</h5>
                             <p><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
                             <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
-                            <p><strong>Сумма:</strong> {{ order.total_price }} ₽</p>
-                            <a href="{% url 'order_detail' order.pk %}"
-                               class="btn btn-outline-primary">
-                                Подробнее
-                            </a>
+                            <p><strong>Сумма:</strong> <span class="price">{{ order.total_price }}</span> ₽</p>
+                            <a href="{% url 'order_detail' order.pk %}" class="btn btn-outline-primary">Подробнее</a>
+                            <a href="{% url 'add_review' order.pk %}" class="btn btn-success">Оценить заказ</a>
                         </div>
                     </div>
                 {% empty %}
-                    <p>У вас пока нет заказов</p>
+                    <p>У вас пока нет доставленных заказов</p>
                 {% endfor %}
             </div>
         </div>

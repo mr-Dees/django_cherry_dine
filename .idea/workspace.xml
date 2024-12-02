@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Исправлен баг с ценами в профиле">
+    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Переработаны детали заказа и корзина администратора">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/add_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/add_review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/shared/menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/shared/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CherryDineApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
@@ -152,7 +154,7 @@
       <workItem from="1732369656970" duration="571000" />
       <workItem from="1732370259931" duration="61000" />
       <workItem from="1732370330270" duration="9172000" />
-      <workItem from="1732717295352" duration="60697000" />
+      <workItem from="1732717295352" duration="62240000" />
     </task>
     <task id="LOCAL-00001" summary="Рабочий вариант без добавления товара в корзину">
       <option name="closed" value="true" />
@@ -226,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733155798148</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Переработаны детали заказа и корзина администратора">
+      <option name="closed" value="true" />
+      <created>1733157873393</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1733157873393</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +263,7 @@
     <MESSAGE value="Переработана система добавления блюда в корзину. Инициализация скриптов разнесена по нескольким файлам." />
     <MESSAGE value="Реализованно создание заказов" />
     <MESSAGE value="Исправлен баг с ценами в профиле" />
-    <option name="LAST_COMMIT_MESSAGE" value="Исправлен баг с ценами в профиле" />
+    <MESSAGE value="Переработаны детали заказа и корзина администратора" />
+    <option name="LAST_COMMIT_MESSAGE" value="Переработаны детали заказа и корзина администратора" />
   </component>
 </project>

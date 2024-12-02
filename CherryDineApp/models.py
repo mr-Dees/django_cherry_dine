@@ -62,11 +62,10 @@ class OrderItem(models.Model):
 # Модель отзыва
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField()
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Отзыв от {self.user.username} на {self.menu_item.name}"
+        return f"Отзыв на заказ #{self.order.id} от {self.user.username}"

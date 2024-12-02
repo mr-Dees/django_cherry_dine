@@ -15,6 +15,9 @@
                 <th>Дата</th>
                 <th>Статус</th>
                 <th>Общая стоимость</th>
+                {% if user.role == 'admin' %}
+                    <th>Отзыв</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -39,6 +42,25 @@
                         {% endif %}
                     </td>
                     <td class="price">{{ order.total_price }}</td>
+                    {% if user.role == 'admin' %}
+                        <td>
+                            {% with review=order.review_set.first %}
+                                {% if review %}
+                                    <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#review{{ order.id }}" aria-expanded="false">
+                                        Оценка: {{ review.rating }}/5
+                                    </button>
+                                    <div class="collapse" id="review{{ order.id }}">
+                                        <div class="card card-body">
+                                            {{ review.comment }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">Нет отзыва</span>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>

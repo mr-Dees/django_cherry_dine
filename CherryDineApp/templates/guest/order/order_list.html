@@ -1,14 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Мои заказы{% endblock %}
+{% block title %}{% if user.role == 'admin' %}Все заказы{% else %}Мои заказы{% endif %}{% endblock %}
 
 {% block content %}
-    <h2>Мои заказы</h2>
+    <h2>{% if user.role == 'admin' %}Все заказы{% else %}Мои заказы{% endif %}</h2>
 
     {% if orders %}
         <table class="table">
             <thead>
             <tr>
                 <th>ID заказа</th>
+                {% if user.role == 'admin' %}
+                    <th>Пользователь</th>
+                {% endif %}
                 <th>Дата</th>
                 <th>Статус</th>
                 <th>Общая стоимость</th>
@@ -18,14 +21,60 @@
             {% for order in orders %}
                 <tr>
                     <td>{{ order.id }}</td>
+                    {% if user.role == 'admin' %}
+                        <td>{{ order.user.username }}</td>
+                    {% endif %}
                     <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                    <td>{{ order.get_status_display }}</td>
-                    <td>{{ order.calculate_total }} ₽</td>
+                    <td>
+                        {% if user.role == 'admin' %}
+                            <select class="form-select status-select" data-order-id="{{ order.id }}">
+                                {% for status, label in order.STATUS_CHOICES %}
+                                    <option value="{{ status }}" {% if order.status == status %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            {{ order.get_status_display }}
+                        {% endif %}
+                    </td>
+                    <td class="price">{{ order.total_price }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+
+        {% if user.role == 'admin' %}
+            <script>
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', function () {
+                        const orderId = this.dataset.orderId;
+                        const newStatus = this.value;
+
+                        fetch(`/orders/${orderId}/update-status/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({
+                                status: newStatus
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    showNotification('Статус заказа обновлен', 'success');
+                                } else {
+                                    showNotification('Ошибка при обновлении статуса', 'danger');
+                                }
+                            });
+                    });
+                });
+            </script>
+        {% endif %}
     {% else %}
-        <p>Вы ещё не сделали ни одного заказа. <a href="{% url 'menu' %}">Перейти к меню</a>.</p>
+        <p>{% if user.role == 'admin' %}Заказов пока нет{% else %}Вы ещё не сделали ни одного заказа.
+            <a href="{% url 'menu' %}">Перейти к меню</a>{% endif %}.</p>
     {% endif %}
 {% endblock %}

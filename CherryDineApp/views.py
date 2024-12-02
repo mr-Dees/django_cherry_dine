@@ -339,11 +339,34 @@ def update_cart_quantity(request, item_id):
     }, status=405)
 
 
+@login_required
+def update_order_status(request, order_id):
+    if request.user.role != 'admin':
+        return JsonResponse({'success': False, 'message': 'Доступ запрещен'}, status=403)
+
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            order = Order.objects.get(id=order_id)
+            order.status = data['status']
+            order.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+
+    return JsonResponse({'success': False, 'message': 'Неверный метод запроса'})
+
+
 # Список заказов
 @login_required
 def order_list(request):
-    """Просмотр списка заказов текущего пользователя."""
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    # Если пользователь админ, показываем все заказы
+    if request.user.role == 'admin':
+        orders = Order.objects.all().order_by('-created_at')
+    else:
+        # Для обычных пользователей только их заказы
+        orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
     return render(request, 'guest/order/order_list.html', {'orders': orders})
 
 

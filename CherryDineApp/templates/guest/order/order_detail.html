@@ -4,13 +4,33 @@
 
 {% block content %}
     <h1>Детали заказа #{{ order.id }}</h1>
-    <p>Статус: {{ order.status }}</p>
-    <p>Дата: {{ order.created_at }}</p>
-    <ul>
-        {% for item in order.items.all %}
-            <li>{{ item.name }} - {{ item.price }} руб.</li>
+    <p>Статус: {{ order.get_status_display }}</p>
+    <p>Дата: {{ order.created_at|date:"d.m.Y H:i" }}</p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in order.orderitem_set.all %}
+            <tr>
+                <td>{{ item.menu_item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td class="price">{{ item.menu_item.price }}</td>
+                <td class="price">{% widthratio item.menu_item.price 1 item.quantity %}</td>
+            </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'menu' %}" class="btn btn-secondary">Вернуться в меню</a>
-    <a href="{% url 'cart' %}" class="btn btn-secondary">Корзина</a>
+        <tr>
+            <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+            <td class="price">{{ order.total_price }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button class="btn btn-secondary" onclick="history.back()">Назад</button>
 {% endblock %}

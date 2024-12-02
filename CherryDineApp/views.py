@@ -195,6 +195,11 @@ def create_order(request):
     return redirect('cart')
 
 
+def order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    return render(request, 'guest/order/order_detail.html', {'order': order})
+
+
 @login_required
 def cancel_order(request, order_id):
     order = Order.objects.get(id=order_id, user=request.user)

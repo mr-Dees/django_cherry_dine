@@ -30,7 +30,7 @@
                             <h5 class="card-title">Заказ #{{ order.id }}</h5>
                             <p><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
                             <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
-                            <p><strong>Сумма:</strong> {{ order.total_amount }} ₽</p>
+                            <p><strong>Сумма:</strong> {{ order.total_price }} ₽</p>
                             <a href="{% url 'order_detail' order.pk %}"
                                class="btn btn-outline-primary">
                                 Подробнее

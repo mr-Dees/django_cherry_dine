@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Добавлены тесты">
+    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Улучшены формы регистрации и входа">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/restaurant/auth/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/restaurant/auth/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/restaurant/auth/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/restaurant/auth/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/cart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,9 +87,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\restaurant" />
-      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\shared" />
       <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\guest" />
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\shared" />
+      <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\restaurant" />
       <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\guest\order" />
       <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates" />
     </key>
@@ -152,7 +153,7 @@
       <workItem from="1732370259931" duration="61000" />
       <workItem from="1732370330270" duration="9172000" />
       <workItem from="1732717295352" duration="63107000" />
-      <workItem from="1733227527634" duration="12252000" />
+      <workItem from="1733227527634" duration="12655000" />
     </task>
     <task id="LOCAL-00001" summary="Рабочий вариант без добавления товара в корзину">
       <option name="closed" value="true" />
@@ -298,7 +299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733241745255</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Улучшены формы регистрации и входа">
+      <option name="closed" value="true" />
+      <created>1733242202240</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1733242202240</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -333,6 +342,7 @@
     <MESSAGE value="Добавлена возможность отменить заказ до его готовности" />
     <MESSAGE value="Отправка писем в асинхронном режиме" />
     <MESSAGE value="Добавлены тесты" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлены тесты" />
+    <MESSAGE value="Улучшены формы регистрации и входа" />
+    <option name="LAST_COMMIT_MESSAGE" value="Улучшены формы регистрации и входа" />
   </component>
 </project>

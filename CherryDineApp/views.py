@@ -228,7 +228,7 @@ def create_order(request):
 
 def order_detail(request, pk):
     order = get_object_or_404(Order, pk=pk)
-    return render(request, 'guest/order/order_detail.html', {'order': order})
+    return render(request, 'guest/order_detail.html', {'order': order})
 
 
 @login_required
@@ -280,7 +280,7 @@ def cart(request):
         'total_price': sum(item['subtotal'] for item in items_with_details),
         'current_sort': sort_by,
     }
-    return render(request, 'guest/order/cart.html', context)
+    return render(request, 'shared/cart.html', context)
 
 
 @login_required
@@ -288,7 +288,7 @@ def add_to_cart(request, item_id):
     if request.method == 'POST':
         # Проверяем, есть ли JSON данные в запросе
         if not request.body or not request.headers.get('Content-Type') == 'application/json':
-            return JsonResponse({'success': True}, status=200)  # Возвращаем без сообщения
+            return JsonResponse({'success': True}, status=200)
 
         try:
             # Получаем данные из JSON
@@ -433,7 +433,7 @@ def order_list(request):
     else:
         orders = orders.order_by('-created_at')  # По умолчанию новые сверху
 
-    return render(request, 'guest/order/order_list.html', {
+    return render(request, 'guest/order_list.html', {
         'orders': orders,
         'current_sort': sort_by,
     })

@@ -1,11 +1,9 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.core import mail
 from decimal import Decimal
 from unittest.mock import patch
-import json
-
 from .models import User, MenuItem, Order, OrderItem
+import json
 
 
 class OrderTestCase(TestCase):
@@ -187,3 +185,124 @@ class OrderTestCase(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_add_review(self):
+        """Тест добавления отзыва"""
+        self.client.login(username='user', password='pass')
+
+        order = Order.objects.create(
+            user=self.user,
+            status='delivered',
+            total_price=Decimal('200.00')
+        )
+
+        response = self.client.post(
+            reverse('add_review', args=[order.id]),
+            data={'rating': 5, 'comment': 'Отличный заказ'}
+        )
+
+        self.assertEqual(response.status_code, 302)
+        review = order.review_set.first()
+        self.assertIsNotNone(review)
+        self.assertEqual(review.rating, 5)
+
+    def test_duplicate_review(self):
+        """Тест запрета повторных отзывов"""
+        self.client.login(username='user', password='pass')
+
+        order = Order.objects.create(
+            user=self.user,
+            status='delivered',
+            total_price=Decimal('200.00')
+        )
+
+        # Первый отзыв
+        self.client.post(
+            reverse('add_review', args=[order.id]),
+            data={'rating': 5, 'comment': 'Отличный заказ'}
+        )
+
+        # Повторный отзыв
+        response = self.client.post(
+            reverse('add_review', args=[order.id]),
+            data={'rating': 4, 'comment': 'Другой отзыв'}
+        )
+
+        self.assertEqual(order.review_set.count(), 1)
+
+    def test_profile_edit(self):
+        """Тест редактирования профиля"""
+        self.client.login(username='user', password='pass')
+
+        response = self.client.post(
+            reverse('profile_edit'),
+            data={
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'email': 'new@mail.ru',
+                'address': 'New Address'
+            }
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, 'John')
+        self.assertEqual(self.user.email, 'new@mail.ru')
+
+    def test_menu_filtering(self):
+        """Тест фильтрации меню"""
+        MenuItem.objects.create(
+            name='Десерт',
+            description='Описание',
+            category='dessert',
+            price=Decimal('50.00')
+        )
+
+        response = self.client.get(
+            reverse('menu'),
+            {'category': 'main', 'min_price': '90', 'max_price': '110'}
+        )
+
+        self.assertEqual(len(response.context['dishes']), 1)
+        self.assertEqual(response.context['dishes'][0], self.menu_item)
+
+    def test_menu_sorting(self):
+        """Тест сортировки меню"""
+        MenuItem.objects.create(
+            name='Абрикос',
+            description='Описание',
+            category='dessert',
+            price=Decimal('50.00')
+        )
+
+        response = self.client.get(reverse('menu'), {'sort': 'name'})
+        dishes = list(response.context['dishes'])
+        self.assertEqual(dishes[0].name, 'Абрикос')
+
+    def test_menu_item_image(self):
+        """Тест загрузки изображения блюда"""
+        self.client.login(username='admin', password='pass')
+
+        # Создаем временный файл для теста
+        from PIL import Image
+        import tempfile
+
+        # Создаем временное изображение
+        image = Image.new('RGB', (100, 100), color='red')
+        temp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
+        image.save(temp_file)
+        temp_file.seek(0)
+
+        response = self.client.post(
+            reverse('add_menu_item'),
+            {
+                'name': 'Блюдо с картинкой',
+                'description': 'Описание',
+                'category': 'main',
+                'price': '100.00',
+                'image': temp_file
+            }
+        )
+
+        menu_item = MenuItem.objects.get(name='Блюдо с картинкой')
+        self.assertTrue(menu_item.image)

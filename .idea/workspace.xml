@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Небольшой рефакторинг с выносим стилей в статические файлы">
+    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Добавлена возможность загрузки картинок, переработана формы добавления и редактирования блюда">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/admin/add_menu_item.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/admin/add_menu_item.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/admin/edit_menu_item.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/admin/edit_menu_item.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +65,7 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "Django Server.django_cherry_dine.executor": "Run",
+    "Django tests.Test: CherryDineApp.tests.OrderTestCase.test_menu_item_image.executor": "Run",
     "JavaScript Debug.127.0.0.1:8000.executor": "Debug",
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -97,7 +93,28 @@
       <recent name="D:\Program\Development\PROJECT\Pyton\django_cherry_dine\CherryDineApp\templates\restaurant" />
     </key>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.127.0.0.1:8000">
+  <component name="RunManager" selected="Django tests.Test: CherryDineApp.tests.OrderTestCase.test_menu_item_image">
+    <configuration name="Test: CherryDineApp.tests.OrderTestCase.test_menu_item_image" type="DjangoTestsConfigurationType" temporary="true">
+      <module name="django_cherry_dine" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="CherryDineApp.tests.OrderTestCase.test_menu_item_image" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="127.0.0.1:8000" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://127.0.0.1:8000/">
       <method v="2" />
     </configuration>
@@ -128,6 +145,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Django tests.Test: CherryDineApp.tests.OrderTestCase.test_menu_item_image" />
         <item itemvalue="JavaScript Debug.127.0.0.1:8000" />
       </list>
     </recent_temporary>
@@ -156,7 +174,7 @@
       <workItem from="1732370259931" duration="61000" />
       <workItem from="1732370330270" duration="9172000" />
       <workItem from="1732717295352" duration="63107000" />
-      <workItem from="1733227527634" duration="16345000" />
+      <workItem from="1733227527634" duration="17210000" />
     </task>
     <task id="LOCAL-00001" summary="Рабочий вариант без добавления товара в корзину">
       <option name="closed" value="true" />
@@ -326,7 +344,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733243940166</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Добавлена возможность загрузки картинок, переработана формы добавления и редактирования блюда">
+      <option name="closed" value="true" />
+      <created>1733246387839</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1733246387839</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -364,6 +390,10 @@
     <MESSAGE value="Улучшены формы регистрации и входа" />
     <MESSAGE value="Проведена реструктуризация шаблонов" />
     <MESSAGE value="Небольшой рефакторинг с выносим стилей в статические файлы" />
-    <option name="LAST_COMMIT_MESSAGE" value="Небольшой рефакторинг с выносим стилей в статические файлы" />
+    <MESSAGE value="Добавлена возможность загрузки картинок, переработана формы добавления и редактирования блюда" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлена возможность загрузки картинок, переработана формы добавления и редактирования блюда" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/django_cherry_dine$Test__CherryDineApp_tests_OrderTestCase_test_menu_item_image.coverage" NAME="Test: CherryDineApp.tests.OrderTestCase.test_menu_item_image Coverage Results" MODIFIED="1733247164539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

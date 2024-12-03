@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
 {% load static %}
-
+{% load widget_tweaks %}
 {% block extra_scripts %}
     <script src="{% static 'js/adding_dish.js' %}"></script>
 {% endblock %}
@@ -19,58 +18,79 @@
             {% endif %}
         </div>
 
-        <!-- Сортировка -->
-        <div class="row mb-4">
-            <div class="col d-flex align-items-center">
-                <div class="dropdown me-2">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        Сортировать по
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                        <li><a class="dropdown-item {% if current_sort == 'name' %}active{% endif %}"
-                               href="?sort=name">Названию (А-Я)</a></li>
-                        <li><a class="dropdown-item {% if current_sort == 'name_desc' %}active{% endif %}"
-                               href="?sort=name_desc">Названию (Я-А)</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item {% if current_sort == 'price' %}active{% endif %}"
-                               href="?sort=price">Цене (по возрастанию)</a></li>
-                        <li><a class="dropdown-item {% if current_sort == 'price_desc' %}active{% endif %}"
-                               href="?sort=price_desc">Цене (по убыванию)</a></li>
-                        {% if request.resolver_match.url_name == 'menu' %}
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item {% if current_sort == 'category' %}active{% endif %}"
-                                   href="?sort=category">Категории (А-Я)</a></li>
-                            <li><a class="dropdown-item {% if current_sort == 'category_desc' %}active{% endif %}"
-                                   href="?sort=category_desc">Категории (Я-А)</a></li>
-                        {% endif %}
-                        {% if request.resolver_match.url_name == 'order_list' %}
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item {% if current_sort == 'date' %}active{% endif %}"
-                                   href="?sort=date">Дате (сначала старые)</a></li>
-                            <li><a class="dropdown-item {% if current_sort == 'date_desc' %}active{% endif %}"
-                                   href="?sort=date_desc">Дате (сначала новые)</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item {% if current_sort == 'status' %}active{% endif %}"
-                                   href="?sort=status">Статусу (А-Я)</a></li>
-                            <li><a class="dropdown-item {% if current_sort == 'status_desc' %}active{% endif %}"
-                                   href="?sort=status_desc">Статусу (Я-А)</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                {% if current_sort %}
-                    <a href="{{ request.path }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-times"></i> Сбросить
-                    </a>
-                {% endif %}
+        <!-- Фильтры и сортировка -->
+        <!-- Панель управления -->
+        <div class="d-flex align-items-center mb-3 gap-2">
+            <!-- Кнопка фильтров -->
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#filterPanel" aria-expanded="false" aria-controls="filterPanel">
+                <i class="fas fa-filter"></i> Фильтры
+            </button>
+
+            <!-- Форма сортировки -->
+            <form method="get" id="sortForm" class="d-inline">
+                <!-- Сохраняем значения фильтров -->
+                {% if request.GET.category %}
+                    <input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+                {% if request.GET.min_price %}
+                    <input type="hidden" name="min_price" value="{{ request.GET.min_price }}">{% endif %}
+                {% if request.GET.max_price %}
+                    <input type="hidden" name="max_price" value="{{ request.GET.max_price }}">{% endif %}
+
+                <select name="sort" class="form-select" style="width: auto;" onchange="this.form.submit()">
+                    <option value="">Сортировка</option>
+                    <option value="name" {% if current_sort == 'name' %}selected{% endif %}>По названию (А-Я)</option>
+                    <option value="name_desc" {% if current_sort == 'name_desc' %}selected{% endif %}>По названию
+                        (Я-А)
+                    </option>
+                    <option value="price" {% if current_sort == 'price' %}selected{% endif %}>По цене (возрастание)
+                    </option>
+                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>По цене
+                        (убывание)
+                    </option>
+                    <option value="category" {% if current_sort == 'category' %}selected{% endif %}>По категории (А-Я)
+                    </option>
+                    <option value="category_desc" {% if current_sort == 'category_desc' %}selected{% endif %}>По
+                        категории (Я-А)
+                    </option>
+                </select>
+            </form>
+
+            <!-- Кнопка сброса (появляется при любой фильтрации или сортировке) -->
+            {% if request.GET %}
+                <a href="{% url 'menu' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Сбросить
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Панель фильтров -->
+        <div class="collapse mb-4" id="filterPanel">
+            <div class="card p-3">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">{{ filter.form.category.label }}</label>
+                        {{ filter.form.category|add_class:"form-select" }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ filter.form.min_price.label }}</label>
+                        {{ filter.form.min_price|add_class:"form-control" }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">{{ filter.form.max_price.label }}</label>
+                        {{ filter.form.max_price|add_class:"form-control" }}
+                    </div>
+
+                    <!-- Кнопка применить -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Применить</button>
+                    </div>
+
+                    <!-- Сохраняем значение сортировки при применении фильтров -->
+                    {% if current_sort %}
+                        <input type="hidden" name="sort" value="{{ current_sort }}">
+                    {% endif %}
+                </form>
             </div>
         </div>
 
@@ -86,24 +106,20 @@
                             <h5 class="card-title">{{ dish.name }}</h5>
                             <p class="card-text">{{ dish.description|truncatewords:20 }}</p>
                             <p class="card-text"><strong>{{ dish.price }} ₽</strong></p>
+                            <p class="card-text"><small class="text-muted">{{ dish.get_category_display }}</small></p>
 
                             <div class="d-flex justify-content-between align-items-center">
                                 {% if user.role == 'admin' %}
-                                    <!-- Элементы управления для администратора -->
                                     <div class="btn-group">
-                                        <a href="{% url 'edit_menu_item' dish.pk %}?next=menu"
-                                           class="btn btn-warning">
+                                        <a href="{% url 'edit_menu_item' dish.pk %}?next=menu" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> Изменить
                                         </a>
-                                        <button type="button"
-                                                class="btn btn-danger"
-                                                data-bs-toggle="modal"
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal{{ dish.pk }}">
                                             <i class="fas fa-trash"></i> Удалить
                                         </button>
                                     </div>
                                 {% else %}
-                                    <!-- Элементы управления для гостя -->
                                     <div class="d-flex align-items-center">
                                         {% if not dish.in_cart %}
                                             <div class="input-group me-2" style="width: 120px;">
@@ -116,8 +132,7 @@
                                                         type="button">+
                                                 </button>
                                             </div>
-                                            <button class="btn btn-success add-to-cart"
-                                                    data-dish-id="{{ dish.id }}">
+                                            <button class="btn btn-success add-to-cart" data-dish-id="{{ dish.id }}">
                                                 В корзину
                                             </button>
                                         {% else %}

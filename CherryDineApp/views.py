@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from .forms import RegistrationForm, LoginForm, ProfileEditForm, MenuItemForm, OrderForm, ReviewForm
 from .models import User, MenuItem, Order, Review, OrderItem
+from .filters import MenuItemFilter
 
 
 def is_admin(user):
@@ -64,32 +65,37 @@ def logout_view(request):
 
 
 def menu(request):
-    dishes = MenuItem.objects.all()
-    cart = request.session.get('cart', {})
+    # Получаем все блюда
+    queryset = MenuItem.objects.all()
 
-    # Получаем параметр сортировки
+    # Применяем фильтры
+    menu_filter = MenuItemFilter(request.GET, queryset=queryset)
+    filtered_dishes = menu_filter.qs
+
+    # Применяем сортировку
     sort_by = request.GET.get('sort')
-
-    # Применяем сортировку только если она задана
     if sort_by:
         if sort_by == 'name':
-            dishes = dishes.order_by('name')
+            filtered_dishes = filtered_dishes.order_by('name')
         elif sort_by == 'name_desc':
-            dishes = dishes.order_by('-name')
+            filtered_dishes = filtered_dishes.order_by('-name')
         elif sort_by == 'price':
-            dishes = dishes.order_by('price')
+            filtered_dishes = filtered_dishes.order_by('price')
         elif sort_by == 'price_desc':
-            dishes = dishes.order_by('-price')
+            filtered_dishes = filtered_dishes.order_by('-price')
         elif sort_by == 'category':
-            dishes = dishes.order_by('category', 'name')
+            filtered_dishes = filtered_dishes.order_by('category', 'name')
         elif sort_by == 'category_desc':
-            dishes = dishes.order_by('-category', 'name')
+            filtered_dishes = filtered_dishes.order_by('-category', 'name')
 
-    for dish in dishes:
+    # Добавляем информацию о корзине
+    cart = request.session.get('cart', {})
+    for dish in filtered_dishes:
         dish.in_cart = str(dish.id) in cart
 
     context = {
-        'dishes': dishes,
+        'dishes': filtered_dishes,
+        'filter': menu_filter,
         'current_sort': sort_by,
     }
     return render(request, 'shared/menu.html', context)

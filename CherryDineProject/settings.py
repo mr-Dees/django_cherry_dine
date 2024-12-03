@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'CherryDineApp.apps.CherrydineappConfig',
+    'django_filters',
+    'widget_tweaks',
 ]
 
 # Настройка приложений по обработке запросов и ответов

@@ -60,30 +60,33 @@
             </div>
         </div>
 
-        <table class="table">
-            <thead>
+        <table class="table table-bordered">
+            <thead class="table-light border-bottom">
             <tr>
-                <th>ID заказа</th>
+                <th class="align-middle">ID заказа</th>
                 {% if user.role == 'admin' %}
-                    <th>Пользователь</th>
+                    <th class="align-middle">Пользователь</th>
                 {% endif %}
-                <th>Дата</th>
-                <th>Статус</th>
-                <th>Общая стоимость</th>
+                <th class="align-middle">Дата</th>
+                <th class="align-middle">Статус</th>
+                <th class="align-middle">Общая стоимость</th>
+                {% if not user.role == 'admin' %}
+                    <th class="align-middle" style="width: 100px;">Действия</th>
+                {% endif %}
                 {% if user.role == 'admin' %}
-                    <th>Отзыв</th>
+                    <th class="align-middle">Отзыв</th>
                 {% endif %}
             </tr>
             </thead>
             <tbody>
             {% for order in orders %}
                 <tr>
-                    <td>{{ order.id }}</td>
+                    <td class="align-middle">{{ order.id }}</td>
                     {% if user.role == 'admin' %}
-                        <td>{{ order.user.username }}</td>
+                        <td class="align-middle">{{ order.user.username }}</td>
                     {% endif %}
-                    <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                    <td>
+                    <td class="align-middle">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                    <td class="align-middle">
                         {% if user.role == 'admin' %}
                             <select class="form-select status-select" data-order-id="{{ order.id }}">
                                 {% for status, label in order.STATUS_CHOICES %}
@@ -96,9 +99,49 @@
                             {{ order.get_status_display }}
                         {% endif %}
                     </td>
-                    <td class="price">{{ order.total_price }}</td>
+                    <td class="align-middle price">{{ order.total_price }}</td>
+                    {% if not user.role == 'admin' %}
+                        <td class="align-middle text-center">
+                            {% if order.can_be_cancelled %}
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal{{ order.id }}">
+                                    Отменить
+                                </button>
+
+                                <!-- Модальное окно подтверждения отмены -->
+                                <div class="modal fade" id="cancelModal{{ order.id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Подтверждение отмены заказа</h5>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Вы уверены, что хотите отменить заказ #{{ order.id }}?</p>
+                                                <p class="text-muted mb-0">Это действие нельзя будет отменить.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Закрыть
+                                                </button>
+                                                <form action="{% url 'cancel_order' order.id %}" method="post"
+                                                      class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">
+                                                        Отменить заказ
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                     {% if user.role == 'admin' %}
-                        <td>
+                        <td class="align-middle">
                             {% with review=order.review_set.first %}
                                 {% if review %}
                                     <button class="btn btn-link" type="button" data-bs-toggle="collapse"
@@ -116,6 +159,16 @@
                             {% endwith %}
                         </td>
                     {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="{% if user.role == 'admin' %}7{% else %}6{% endif %}" class="text-center">
+                        {% if user.role == 'admin' %}
+                            Заказов пока нет
+                        {% else %}
+                            Вы ещё не сделали ни одного заказа. <a href="{% url 'menu' %}">Перейти к меню</a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

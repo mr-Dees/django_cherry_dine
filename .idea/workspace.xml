@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Добавлена фильтрация меню">
+    <list default="true" id="f176a30e-e81b-4bff-8b1b-c557f3d8cefc" name="Changes" comment="Добавлен контроль корзины для неавторизованных пользователей">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/shared/dish_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/dish_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/shared/menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/shared/menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/templates/guest/order/order_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CherryDineApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CherryDineApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/CherryDineApp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
@@ -152,7 +154,7 @@
       <workItem from="1732370259931" duration="61000" />
       <workItem from="1732370330270" duration="9172000" />
       <workItem from="1732717295352" duration="63107000" />
-      <workItem from="1733227527634" duration="4692000" />
+      <workItem from="1733227527634" duration="6433000" />
     </task>
     <task id="LOCAL-00001" summary="Рабочий вариант без добавления товара в корзину">
       <option name="closed" value="true" />
@@ -266,7 +268,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733231579904</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Добавлен контроль корзины для неавторизованных пользователей">
+      <option name="closed" value="true" />
+      <created>1733232315712</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1733232315712</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -297,6 +307,7 @@
     <MESSAGE value="Добавлена система отзывов" />
     <MESSAGE value="Добавлена сортировка во все разделы. Исправлена шапка страницы в профиле администратора" />
     <MESSAGE value="Добавлена фильтрация меню" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлена фильтрация меню" />
+    <MESSAGE value="Добавлен контроль корзины для неавторизованных пользователей" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлен контроль корзины для неавторизованных пользователей" />
   </component>
 </project>

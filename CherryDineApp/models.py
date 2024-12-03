@@ -36,6 +36,7 @@ class MenuItem(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = [
         ('processing', 'В обработке'),
+        ('cancelled', 'Отменён'),
         ('ready', 'Готово'),
         ('delivered', 'Доставлено'),
     ]
@@ -48,6 +49,9 @@ class Order(models.Model):
     @property
     def calculate_total(self):
         return sum(item.menu_item.price * item.quantity for item in self.orderitem_set.all())
+
+    def can_be_cancelled(self):
+        return self.status == 'processing'
 
     def __str__(self):
         return f"Заказ #{self.id} от {self.user.username}"

@@ -437,6 +437,20 @@ def order_list(request):
 
 
 @login_required
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if not order.can_be_cancelled():
+        messages.error(request, 'Этот заказ уже нельзя отменить')
+        return redirect('order_list')
+
+    order.status = 'cancelled'
+    order.save()
+    messages.success(request, 'Заказ успешно отменён')
+    return redirect('order_list')
+
+
+@login_required
 def add_review(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
 

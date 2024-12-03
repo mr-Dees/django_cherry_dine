@@ -103,13 +103,12 @@ def menu(request):
 
 @login_required
 def add_menu_item(request):
-    # Проверяем, что пользователь является администратором
     if not request.user.role == 'admin':
         messages.error(request, 'У вас нет прав для добавления блюд')
         return redirect('menu')
 
     if request.method == 'POST':
-        form = MenuItemForm(request.POST)
+        form = MenuItemForm(request.POST, request.FILES)
         if form.is_valid():
             menu_item = form.save()
             messages.success(request, f'Блюдо "{menu_item.name}" успешно добавлено в меню')
@@ -127,15 +126,13 @@ def edit_menu_item(request, pk):
         return redirect('menu')
 
     menu_item = get_object_or_404(MenuItem, pk=pk)
-    # Получаем параметр next из GET или POST запроса
     next_page = request.GET.get('next') or request.POST.get('next', 'menu')
 
     if request.method == 'POST':
-        form = MenuItemForm(request.POST, instance=menu_item)
+        form = MenuItemForm(request.POST, request.FILES, instance=menu_item)
         if form.is_valid():
             form.save()
             messages.success(request, f'Блюдо "{menu_item.name}" успешно обновлено')
-            # Перенаправляем на указанную страницу
             if next_page == 'detail':
                 return redirect('dish_detail', pk=pk)
             return redirect('menu')

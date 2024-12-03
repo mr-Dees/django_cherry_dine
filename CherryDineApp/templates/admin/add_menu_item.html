@@ -11,7 +11,7 @@
                         <h2 class="text-center mb-0">Добавление нового блюда</h2>
                     </div>
                     <div class="card-body">
-                        <form method="post">
+                        <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 
                             {% if form.non_field_errors %}
@@ -38,6 +38,12 @@
                                     {% endif %}
                                     {% if field.help_text %}
                                         <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% if field.name == 'image' and form.instance.image %}
+                                        <div class="mt-2">
+                                            <img src="{{ form.instance.image.url }}" alt="Текущее изображение"
+                                                 class="img-thumbnail" style="max-height: 200px">
+                                        </div>
                                     {% endif %}
                                 </div>
                             {% endfor %}

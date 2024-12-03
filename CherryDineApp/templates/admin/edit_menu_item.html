@@ -11,10 +11,8 @@
                         <h2 class="text-center mb-0">Редактирование блюда "{{ menu_item.name }}"</h2>
                     </div>
                     <div class="card-body">
-                        <form method="post">
+                        <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-
-                            <!-- Добавляем скрытое поле для передачи параметра next -->
                             <input type="hidden" name="next" value="{{ next_page }}">
 
                             {% if form.non_field_errors %}
@@ -41,6 +39,12 @@
                                     {% endif %}
                                     {% if field.help_text %}
                                         <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% if field.name == 'image' and menu_item.image %}
+                                        <div class="mt-2">
+                                            <img src="{{ menu_item.image.url }}" alt="Текущее изображение"
+                                                 class="img-thumbnail" style="max-height: 200px">
+                                        </div>
                                     {% endif %}
                                 </div>
                             {% endfor %}

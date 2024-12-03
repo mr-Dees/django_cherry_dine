@@ -88,21 +88,42 @@ class OrderForm(forms.ModelForm):
         fields = ['items']
 
 
-# forms.py
-
 class MenuItemForm(forms.ModelForm):
     class Meta:
         model = MenuItem
-        fields = ['name', 'description', 'category', 'price']
+        fields = ['name', 'description', 'category', 'price', 'image']
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 4}),
-            'price': forms.NumberInput(attrs={'step': '0.01', 'min': '0'}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите название блюда'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Введите описание блюда'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'price': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'step': '0.01',
+                'min': '0',
+                'placeholder': 'Введите цену'
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control'
+            })
         }
         labels = {
             'name': 'Название блюда',
             'description': 'Описание',
             'category': 'Категория',
             'price': 'Цена',
+            'image': 'Изображение блюда'
+        }
+        help_texts = {
+            'image': 'Необязательное поле. Рекомендуемый размер: 800x600 пикселей'
         }
 
 

@@ -5,21 +5,17 @@ import json
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
+from CherryDineProject import settings
 from .forms import RegistrationForm, LoginForm, ProfileEditForm, MenuItemForm, OrderForm, ReviewForm
 from .models import User, MenuItem, Order, Review, OrderItem
 from .filters import MenuItemFilter
+from django.template.loader import render_to_string
+from django.db.models import Count
+from .email_sender import send_order_notification, send_recommendations_email
 
 
 def is_admin(user):
     return user.role == 'admin'
-
-
-def send_order_confirmation_email(order):
-    subject = f'Подтверждение заказа #{order.id}'
-    message = f'Ваш заказ #{order.id} успешно оформлен и находится в обработке.'
-    from_email = 'noreply@cherrydine.com'
-    recipient_list = [order.user.email]
-    send_mail(subject, message, from_email, recipient_list)
 
 
 def index(request):
@@ -214,6 +210,9 @@ def create_order(request):
                     quantity=quantity
                 )
 
+            # Отправляем письмо о подтверждении заказа
+            send_order_notification(order)
+
             # Очищаем корзину
             request.session['cart'] = {}
             messages.success(request, 'Заказ успешно создан')
@@ -394,9 +393,13 @@ def update_order_status(request, order_id):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            order = Order.objects.get(id=order_id)
+            order = get_object_or_404(Order, id=order_id)
             order.status = data['status']
             order.save()
+
+            if order.status == 'delivered':
+                send_recommendations_email(order.user, order)
+
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})

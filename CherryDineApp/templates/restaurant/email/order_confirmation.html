@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .order-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .items-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .item {
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            color: #0b5ed7;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Заказ подтвержден</h1>
+</div>
+
+<p>Здравствуйте, {{ order.user.username }}!</p>
+<p>Ваш заказ #{{ order.id }} успешно оформлен и принят в обработку.</p>
+
+<div class="order-details">
+    <h2>Детали заказа:</h2>
+    <ul class="items-list">
+        {% for item in items %}
+            <li class="item">
+                <strong>{{ item.menu_item.name }}</strong>
+                <br>
+                {{ item.quantity }} шт. × {{ item.menu_item.price }} ₽
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="total">
+        Итого: {{ order.total_price }} ₽
+    </div>
+</div>
+
+<div class="footer">
+    <p>Спасибо за ваш заказ!</p>
+    <p>С уважением, команда CherryDine</p>
+</div>
+</body>
+</html>

@@ -8,6 +8,42 @@
     <h2>Корзина</h2>
 
     {% if items_with_details %}
+        <div class="row mb-4">
+            <div class="col d-flex align-items-center">
+                <div class="dropdown me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        Сортировать по
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <li><a class="dropdown-item {% if current_sort == 'name' %}active{% endif %}"
+                               href="?sort=name">Названию (А-Я)</a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'name_desc' %}active{% endif %}"
+                               href="?sort=name_desc">Названию (Я-А)</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item {% if current_sort == 'price' %}active{% endif %}"
+                               href="?sort=price">Цене за единицу (по возрастанию)</a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'price_desc' %}active{% endif %}"
+                               href="?sort=price_desc">Цене за единицу (по убыванию)</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item {% if current_sort == 'subtotal' %}active{% endif %}"
+                               href="?sort=subtotal">Сумме позиции (по возрастанию)</a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'subtotal_desc' %}active{% endif %}"
+                               href="?sort=subtotal_desc">Сумме позиции (по убыванию)</a></li>
+                    </ul>
+                </div>
+                {% if current_sort %}
+                    <a href="{{ request.path }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> Сбросить
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        
         <table class="table">
             <thead>
             <tr>

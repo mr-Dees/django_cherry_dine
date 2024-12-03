@@ -67,12 +67,30 @@ def menu(request):
     dishes = MenuItem.objects.all()
     cart = request.session.get('cart', {})
 
-    # Добавляем информацию о наличии в корзине для каждого блюда
+    # Получаем параметр сортировки
+    sort_by = request.GET.get('sort')
+
+    # Применяем сортировку только если она задана
+    if sort_by:
+        if sort_by == 'name':
+            dishes = dishes.order_by('name')
+        elif sort_by == 'name_desc':
+            dishes = dishes.order_by('-name')
+        elif sort_by == 'price':
+            dishes = dishes.order_by('price')
+        elif sort_by == 'price_desc':
+            dishes = dishes.order_by('-price')
+        elif sort_by == 'category':
+            dishes = dishes.order_by('category', 'name')
+        elif sort_by == 'category_desc':
+            dishes = dishes.order_by('-category', 'name')
+
     for dish in dishes:
         dish.in_cart = str(dish.id) in cart
 
     context = {
         'dishes': dishes,
+        'current_sort': sort_by,
     }
     return render(request, 'shared/menu.html', context)
 
@@ -217,22 +235,37 @@ def cart(request):
     cart_items = request.session.get('cart', {})
     menu_items = MenuItem.objects.filter(id__in=cart_items.keys())
 
-    items_with_details = []
-    total_price = 0
+    # Сортировка
+    sort_by = request.GET.get('sort')
+    if sort_by:
+        if sort_by == 'name':
+            menu_items = menu_items.order_by('name')
+        elif sort_by == 'name_desc':
+            menu_items = menu_items.order_by('-name')
+        elif sort_by == 'price':
+            menu_items = menu_items.order_by('price')
+        elif sort_by == 'price_desc':
+            menu_items = menu_items.order_by('-price')
 
+    items_with_details = []
     for item in menu_items:
         quantity = cart_items[str(item.id)]
-        subtotal = item.price * quantity
-        total_price += subtotal
         items_with_details.append({
             'item': item,
             'quantity': quantity,
-            'subtotal': subtotal,
+            'subtotal': item.price * quantity,
         })
+
+    # Сортировка по сумме позиции
+    if sort_by == 'subtotal':
+        items_with_details = sorted(items_with_details, key=lambda x: x['subtotal'])
+    elif sort_by == 'subtotal_desc':
+        items_with_details = sorted(items_with_details, key=lambda x: x['subtotal'], reverse=True)
 
     context = {
         'items_with_details': items_with_details,
-        'total_price': total_price,
+        'total_price': sum(item['subtotal'] for item in items_with_details),
+        'current_sort': sort_by,
     }
     return render(request, 'guest/order/cart.html', context)
 
@@ -360,14 +393,33 @@ def update_order_status(request, order_id):
 # Список заказов
 @login_required
 def order_list(request):
-    # Если пользователь админ, показываем все заказы
     if request.user.role == 'admin':
-        orders = Order.objects.all().order_by('-created_at')
+        orders = Order.objects.all()
     else:
-        # Для обычных пользователей только их заказы
-        orders = Order.objects.filter(user=request.user).order_by('-created_at')
+        orders = Order.objects.filter(user=request.user)
 
-    return render(request, 'guest/order/order_list.html', {'orders': orders})
+    # Сортировка
+    sort_by = request.GET.get('sort')
+    if sort_by:
+        if sort_by == 'date':
+            orders = orders.order_by('created_at')
+        elif sort_by == 'date_desc':
+            orders = orders.order_by('-created_at')
+        elif sort_by == 'status':
+            orders = orders.order_by('status')
+        elif sort_by == 'status_desc':
+            orders = orders.order_by('-status')
+        elif sort_by == 'price':
+            orders = orders.order_by('total_price')
+        elif sort_by == 'price_desc':
+            orders = orders.order_by('-total_price')
+    else:
+        orders = orders.order_by('-created_at')  # По умолчанию новые сверху
+
+    return render(request, 'guest/order/order_list.html', {
+        'orders': orders,
+        'current_sort': sort_by,
+    })
 
 
 @login_required

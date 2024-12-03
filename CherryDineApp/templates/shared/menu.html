@@ -19,21 +19,58 @@
             {% endif %}
         </div>
 
-        <!-- Фильтр по категориям -->
+        <!-- Сортировка -->
         <div class="row mb-4">
-            <div class="col">
-                <div class="btn-group">
-                    <a href="{% url 'menu' %}"
-                       class="btn btn-outline-primary {% if not request.GET.category %}active{% endif %}">
-                        Все
-                    </a>
-                    {% for category in categories %}
-                        <a href="{% url 'menu' %}?category={{ category.slug }}"
-                           class="btn btn-outline-primary {% if request.GET.category == category.slug %}active{% endif %}">
-                            {{ category.name }}
-                        </a>
-                    {% endfor %}
+            <div class="col d-flex align-items-center">
+                <div class="dropdown me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        Сортировать по
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <li><a class="dropdown-item {% if current_sort == 'name' %}active{% endif %}"
+                               href="?sort=name">Названию (А-Я)</a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'name_desc' %}active{% endif %}"
+                               href="?sort=name_desc">Названию (Я-А)</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item {% if current_sort == 'price' %}active{% endif %}"
+                               href="?sort=price">Цене (по возрастанию)</a></li>
+                        <li><a class="dropdown-item {% if current_sort == 'price_desc' %}active{% endif %}"
+                               href="?sort=price_desc">Цене (по убыванию)</a></li>
+                        {% if request.resolver_match.url_name == 'menu' %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item {% if current_sort == 'category' %}active{% endif %}"
+                                   href="?sort=category">Категории (А-Я)</a></li>
+                            <li><a class="dropdown-item {% if current_sort == 'category_desc' %}active{% endif %}"
+                                   href="?sort=category_desc">Категории (Я-А)</a></li>
+                        {% endif %}
+                        {% if request.resolver_match.url_name == 'order_list' %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item {% if current_sort == 'date' %}active{% endif %}"
+                                   href="?sort=date">Дате (сначала старые)</a></li>
+                            <li><a class="dropdown-item {% if current_sort == 'date_desc' %}active{% endif %}"
+                                   href="?sort=date_desc">Дате (сначала новые)</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item {% if current_sort == 'status' %}active{% endif %}"
+                                   href="?sort=status">Статусу (А-Я)</a></li>
+                            <li><a class="dropdown-item {% if current_sort == 'status_desc' %}active{% endif %}"
+                                   href="?sort=status_desc">Статусу (Я-А)</a></li>
+                        {% endif %}
+                    </ul>
                 </div>
+                {% if current_sort %}
+                    <a href="{{ request.path }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> Сбросить
+                    </a>
+                {% endif %}
             </div>
         </div>
 

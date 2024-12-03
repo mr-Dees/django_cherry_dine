@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}{% if user.role == 'admin' %}Все заказы{% else %}Мои заказы{% endif %}{% endblock %}
 
 {% block content %}

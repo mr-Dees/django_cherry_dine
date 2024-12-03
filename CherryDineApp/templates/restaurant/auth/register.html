@@ -3,19 +3,37 @@
 {% block title %}Регистрация - CherryDine{% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body p-4">
                         <h2 class="card-title text-center mb-4">Регистрация</h2>
                         <form method="post">
                             {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                            <div class="row">
+                                {% for field in form %}
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="{{ field.id_for_label }}"
+                                                   class="form-label">{{ field.label }}</label>
+                                            {{ field }}
+                                            {% if field.help_text %}
+                                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                                            {% endif %}
+                                            {% if field.errors %}
+                                                <div class="text-danger">
+                                                    {{ field.errors|join:", " }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mb-3">Зарегистрироваться</button>
                         </form>
-                        <div class="text-center mt-3">
-                            <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+                        <div class="text-center">
+                            <p class="mb-0">Уже есть аккаунт? <a href="{% url 'login' %}" class="text-decoration-none">Войдите</a></p>
                         </div>
                     </div>
                 </div>

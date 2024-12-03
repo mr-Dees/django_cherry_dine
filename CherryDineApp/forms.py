@@ -4,8 +4,20 @@ from .models import User, Order, MenuItem, Review
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(
+        label='Имя пользователя',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mb-3',
+            'placeholder': 'Введите имя пользователя'
+        })
+    )
+    password = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control mb-3',
+            'placeholder': 'Введите пароль'
+        })
+    )
 
 
 class RegistrationForm(UserCreationForm):
@@ -13,20 +25,43 @@ class RegistrationForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2', 'address', 'first_name', 'last_name', 'phone_number']
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        # Сохраняем дополнительные поля в модель пользователя
-        user.first_name = self.cleaned_data.get('first_name')
-        user.last_name = self.cleaned_data.get('last_name')
-        user.phone_number = self.cleaned_data.get('phone_number')
-        user.address = self.cleaned_data.get('address')
-        if commit:
-            user.save()
-        return user
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Оставляем подсказки только для формы регистрации
+        # Настраиваем поля формы
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Введите имя пользователя'
+        })
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Введите email'
+        })
+        self.fields['password1'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Введите пароль'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Подтвердите пароль'
+        })
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Имя'
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Фамилия'
+        })
+        self.fields['phone_number'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Номер телефона'
+        })
+        self.fields['address'].widget.attrs.update({
+            'class': 'form-control mb-3',
+            'placeholder': 'Адрес доставки'
+        })
+
+        # Обновляем help_texts
         self.fields['first_name'].help_text = "Необязательное поле"
         self.fields['last_name'].help_text = "Необязательное поле"
         self.fields['phone_number'].help_text = "Необязательное поле"

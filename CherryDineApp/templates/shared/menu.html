@@ -120,27 +120,48 @@
                                         </button>
                                     </div>
                                 {% else %}
-                                    <div class="d-flex align-items-center">
-                                        {% if not dish.in_cart %}
-                                            <div class="input-group me-2" style="width: 120px;">
-                                                <button class="btn btn-outline-secondary decrease-quantity"
-                                                        type="button">-
+                                    {% if user.is_authenticated %}
+                                        <!-- Элементы управления для авторизованного пользователя -->
+                                        <div class="d-flex align-items-center">
+                                            {% if not dish.in_cart %}
+                                                <div class="input-group me-2" style="width: 120px;">
+                                                    <button class="btn btn-outline-secondary decrease-quantity"
+                                                            type="button">-
+                                                    </button>
+                                                    <input type="number" class="form-control text-center item-quantity"
+                                                           value="1" min="1" max="99" readonly>
+                                                    <button class="btn btn-outline-secondary increase-quantity"
+                                                            type="button">+
+                                                    </button>
+                                                </div>
+                                                <button class="btn btn-success add-to-cart"
+                                                        data-dish-id="{{ dish.id }}">
+                                                    В корзину
                                                 </button>
-                                                <input type="number" class="form-control text-center item-quantity"
-                                                       value="1" min="1" max="99" readonly>
-                                                <button class="btn btn-outline-secondary increase-quantity"
-                                                        type="button">+
+                                            {% else %}
+                                                <a href="{% url 'cart' %}" class="btn btn-primary">
+                                                    Перейти в корзину
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <!-- Элементы управления для неавторизованного пользователя -->
+                                        <div class="d-flex align-items-center">
+                                            <div class="input-group me-2" style="width: 120px;">
+                                                <button class="btn btn-outline-secondary" type="button" disabled>-
+                                                </button>
+                                                <input type="number" class="form-control text-center"
+                                                       value="1" readonly disabled>
+                                                <button class="btn btn-outline-secondary" type="button" disabled>+
                                                 </button>
                                             </div>
-                                            <button class="btn btn-success add-to-cart" data-dish-id="{{ dish.id }}">
+                                            <button class="btn btn-secondary" disabled
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Для добавления в корзину необходимо авторизоваться">
                                                 В корзину
                                             </button>
-                                        {% else %}
-                                            <a href="{% url 'cart' %}" class="btn btn-primary">
-                                                Перейти в корзину
-                                            </a>
-                                        {% endif %}
-                                    </div>
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>

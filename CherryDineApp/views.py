@@ -65,6 +65,10 @@ def logout_view(request):
 
 
 def menu(request):
+    # Если пользователь не авторизован, показываем сообщение
+    if not request.user.is_authenticated:
+        messages.info(request, 'Для оформления заказа необходимо войти или зарегистрироваться')
+
     # Получаем все блюда
     queryset = MenuItem.objects.all()
 
@@ -167,6 +171,10 @@ def delete_menu_item(request, pk):
 
 
 def dish_detail(request, pk):
+    # Если пользователь не авторизован, показываем сообщение
+    if not request.user.is_authenticated:
+        messages.info(request, 'Для оформления заказа необходимо войти или зарегистрироваться')
+
     dish = get_object_or_404(MenuItem, pk=pk)
     cart = request.session.get('cart', {})
     dish.in_cart = str(pk) in cart
